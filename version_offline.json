@@ -1,6 +1,6 @@
 {
-  "build": 12,
+  "build": 13,
   "apkUrl": "https://cdn.jsdelivr.net/gh/joniasus/drm-play-app@main/DRM-Play-Lite-1.56.2-offline.apk",
   "force": false,
-  "message": "<font color='#4fc3f7'><b>🎉 Тест обновления</b></font><br>Обновление через jsDelivr CDN (Москва — без VPN).<br><font color='#4fc3f7'><b>⚡ Проверить обновление</b></font><br>Ручная кнопка в разделе «Информация».<br><font color='#4fc3f7'><b>🔄 Автопроверка при запуске</b></font><br>Да/Нет — в экране обновления (◄ ►)."
+  "message": "<font color='#4fc3f7'><b>📊 Проценты загрузки</b></font><br>Теперь при скачивании обновления показывается процент (0–100%).<br><font color='#4fc3f7'><b>🎉 Обновление через jsDelivr</b></font><br>Москва — без VPN.<br><font color='#4fc3f7'><b>🔄 Автопроверка при запуске</b></font><br>Да/Нет — в экране обновления (◄ ►)."
 }
