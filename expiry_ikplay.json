@@ -1,5 +1,6 @@
 {
-"ok": true,
-"until": "2027-12-31",
-"msg": "📢 <b>Тему на 4PDA удаляем.</b><br><br>Продолжаем в Telegram:<br>https://t.me/ikplayoffline"
-}
+    "ok": true,
+    "until": "2027-01-01",                                                                                                  "msg": "...",
+    "notice": "<b>✅ Тест уведомления</b><br>Сообщение через notice.",
+    "nid": "test-1"
+  }
