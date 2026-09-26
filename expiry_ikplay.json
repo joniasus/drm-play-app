@@ -1,7 +1,4 @@
-{
-    "ok": false,
-    "until": "2026-01-01",
-    "msg": "<b>📢 Присоединяйтесь к нашей Telegram-группе!</b><br>Новости, обновления и обсуждения:<br>https://t.me/ikplayoffline",
-    "notice": "<b>📢 Присоединяйтесь к нашей Telegram-группе!</b><br>Новости, обновления и обсуждения:<br>https://t.me/ikplayoffline",
-    "nid": "test1"
+{ "ok": true, "until": "2027-12-31",
+  "msg": "<b>📢 Присоединяйтесь к нашей Telegram-группе!</b><br>Новости, обновления и обсуждения:<br>https://t.me/ikplayoffline",
+  "nid": "tg-1"
 }
