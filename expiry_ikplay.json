@@ -1,4 +1,5 @@
-{ "ok": true, "until": "2027-12-31",
+{ "ok": true, 
+  "until": "2027-12-31",
   "msg": "<b>📢 Присоединяйтесь к нашей Telegram-группе!</b><br>Новости, обновления и обсуждения:<br>https://t.me/ikplayoffline",
   "nid": "tg-1"
 }
