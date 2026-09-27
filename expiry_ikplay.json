@@ -1,5 +1,7 @@
-{ "ok": true, 
-  "until": "2027-12-31",
-  "msg": "<b>📢 Присоединяйтесь к нашей Telegram-группе!</b><br>Новости, обновления и обсуждения:<br>https://t.me/ikplayoffline",
+{
+  "ok": true,
+  "until": "2099-12-31",
+  "minBuild": 99,
+  "msg": "<b>Эта версия больше не поддерживается.</b><br>Скачайте актуальную версию в нашем Telegram:<br>https://t.me/ikplayoffline",
   "nid": "tg-1"
 }
