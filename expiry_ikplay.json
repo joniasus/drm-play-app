@@ -2,6 +2,6 @@
   "ok": false,
   "until": "2099-12-31",
   "minBuild": 9,
-  "msg": "<b>Доступна новая версия.</b><br>Скачайте актуальную версию в нашем Telegram:<br>https://t.me/ikplayoffline",
+  "msg": "<br>Скачайте актуальную версию в нашем Telegram:<br>https://t.me/ikplayoffline",
   "nid": "tg-1"
 }
