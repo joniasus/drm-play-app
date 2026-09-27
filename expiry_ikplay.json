@@ -1,7 +1,7 @@
 {
   "ok": true,
   "until": "2099-12-31",
-  "minBuild": 99,
+  "minBuild": 8,
   "msg": "<b>Эта версия больше не поддерживается.</b><br>Скачайте актуальную версию в нашем Telegram:<br>https://t.me/ikplayoffline",
   "nid": "tg-1"
 }
