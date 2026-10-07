@@ -2,7 +2,5 @@
     "ok": false,
     "until": "2099-12-31",
     "minBuild": 11,
-    "msg": "<b>Эта версия больше не поддерживается.</b><br>Скачайте актуальную версию в нашем Telegram:<br>https://t.me/ikplayoffline",
-    "note": "Тест уведомления IK Play Offline — это сообщение показывается один раз.",
-    "nid": "test-2026-10-07"
+    "msg": "<b>Эта версия больше не поддерживается.</b><br>Скачайте актуальную версию в нашем Telegram:<br>https://t.me/ikplayoffline"
 }
