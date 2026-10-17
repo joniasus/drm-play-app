@@ -1,5 +1,5 @@
 {
-    "updated":  "17.10.2026",
+    "updated":  "18.10.2026",
     "list":  [
                  {
                      "name":  "Андрей (@filja2)",
@@ -190,6 +190,11 @@
                      "name":  "Igor_O (@Igor_O25)",
                      "sum":  "1000 ₽",
                      "date":  "17.10.2026"
+                 },
+                 {
+                     "name":  "Ingus Benins (@inguss1982)",
+                     "sum":  "10 €",
+                     "date":  "18.10.2026"
                  }
              ]
 }
