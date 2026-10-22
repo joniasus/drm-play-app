@@ -1,6 +1,6 @@
 {
   "build": 18,
   "apkUrl": "https://raw.githubusercontent.com/joniasus/drm-play-app/main/IK-Play-Premium.apk?v=18",
-  "force": false,
-  "message": "<font color='#4fc3f7'><b>IK Play Premium — обновление v18</b></font><br><br><b>Исправлен запуск плеера.</b> У части устройств v17 не стартовал (зависал на заставке) — исправлено. Обновитесь, чтобы плеер снова работал.<br><br>Новости и новые версии — t.me/ikplayoffline"
+  "force": true,
+  "message": "<font color='#4fc3f7'><b>IK Play Premium — обновление v18</b></font><br><br><b>Исправлен запуск плеера.</b> У части устройств v17 не стартовал (зависал на заставке) — исправлено. Нажмите «Обновить» — плеер снова заработает, плейлисты и настройки сохранятся.<br><br>Новости и новые версии — t.me/ikplayoffline"
 }
