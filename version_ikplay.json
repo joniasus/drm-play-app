@@ -1,6 +1,6 @@
 {
-  "build": 18,
-  "apkUrl": "https://raw.githubusercontent.com/joniasus/drm-play-app/main/IK-Play-Premium.apk?v=18",
+  "build": 19,
+  "apkUrl": "https://raw.githubusercontent.com/joniasus/drm-play-app/main/IK-Play-Premium.apk?v=19",
   "force": true,
-  "message": "<font color='#4fc3f7'><b>IK Play Premium — обновление v18</b></font><br><br><b>Исправлен запуск плеера.</b> У части устройств v17 не стартовал (зависал на заставке) — исправлено. Нажмите «Обновить» — плеер снова заработает, плейлисты и настройки сохранятся.<br><br>Новости и новые версии — t.me/ikplayoffline"
+  "message": "<font color='#4fc3f7'><b>IK Play Premium — v19</b></font><br><br><b>🌤 Умная погода</b> — погодный виджет поверх плеера: 16 стилей, анимации, размер, свободное перемещение, часы, прогресс, звуки.<br><b>📺 Новое:</b> Портал (Stalker/Xtream), ivi, Okko, управление с телефона, автозапуск.<br><b>🛠</b> Плавность HLS-каналов (НТВ HD и др. — без рывков), усилена защита.<br><br>Нажмите «Обновить» — плейлисты и настройки сохранятся.<br>Новости — t.me/ikplayoffline"
 }
