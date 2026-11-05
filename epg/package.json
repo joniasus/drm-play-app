@@ -1,0 +1,6 @@
+{
+  "name": "ikplay-epg-ikdb",
+  "private": true,
+  "description": "IK Play: pre-built EPG (ikdb = SQLite with ready per-channel blobs) so boxes skip XMLTV parsing",
+  "dependencies": { "better-sqlite3": "11.8.1" }
+}

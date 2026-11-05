@@ -1,0 +1,75 @@
+# IK Play — pre-built EPG ("ikdb").
+# Italofull (github.com/itaalo67/epg, ~6000 channels / ~2M programmes) is turned into a SQLite file whose per-channel
+# blobs are byte-identical to what the app's own EPG writer stores (checked 5964/5964 on a Dune box). The app then only
+# ATTACHes it and copies rows (~2 s) instead of parsing 2 GB of XML (~50 s on Dune Pro 8K Plus, minutes on weak boxes).
+name: EPG ikdb
+
+on:
+  schedule:
+    - cron: '45 18 * * *'   # italo full.xml.gz is republished around 18:15 UTC
+    - cron: '45 23 * * *'   # fallback if it was late
+  workflow_dispatch:
+    inputs:
+      force:
+        description: 'Rebuild even if the source did not change'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: epg-ikdb
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      GH_TOKEN: ${{ github.token }}
+      TAG: epg-ikdb
+      SRC: https://github.com/itaalo67/epg/releases/download/daily/full.xml.gz
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: epg
+      - name: Source changed?
+        id: chk
+        run: |
+          set -e
+          src=$(gh api repos/itaalo67/epg/releases/tags/daily --jq '.assets[] | select(.name=="full.xml.gz") | .updated_at')
+          echo "source updated_at: $src"
+          prev=$(gh release view "$TAG" --json body --jq .body 2>/dev/null | sed -n 's/^src_updated_at: //p' | head -1 || true)
+          echo "last built from:  $prev"
+          echo "src=$src" >> "$GITHUB_OUTPUT"
+          if [ -n "$src" ] && [ "$src" = "$prev" ] && [ "${{ inputs.force }}" != "true" ]; then echo "skip=1" >> "$GITHUB_OUTPUT"; fi
+      - uses: actions/setup-node@v4
+        if: steps.chk.outputs.skip != '1'
+        with:
+          node-version: '20'
+      - name: Install
+        if: steps.chk.outputs.skip != '1'
+        working-directory: epg
+        run: npm install --no-audit --no-fund
+      - name: Download italo
+        if: steps.chk.outputs.skip != '1'
+        run: curl -fsSL --retry 3 -o /tmp/italo.xml.gz "$SRC" && ls -la /tmp/italo.xml.gz
+      - name: Build ikdb
+        if: steps.chk.outputs.skip != '1'
+        env:
+          TZ: Asia/Tashkent   # "today" for the past/future window = the users' local day
+        run: node --max-old-space-size=6144 epg/ikdb_gen.js /tmp/italo.xml.gz /tmp/italo.ikdb --gz | tee /tmp/gen.log
+      - name: Publish release asset
+        if: steps.chk.outputs.skip != '1'
+        run: |
+          set -e
+          stats=$(grep '^{' /tmp/gen.log | tail -1)
+          notes=$(printf 'Pre-built EPG for IK Play (format ikdb1, gzip of SQLite).\nsrc: %s\nsrc_updated_at: %s\nbuilt_at: %s\nstats: %s\n' "$SRC" "${{ steps.chk.outputs.src }}" "$(date -u +%FT%TZ)" "$stats")
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" /tmp/italo.ikdb.gz --clobber
+            gh release edit "$TAG" --notes "$notes"
+          else
+            gh release create "$TAG" /tmp/italo.ikdb.gz --title "EPG ikdb (IK Play)" --notes "$notes" --latest=false
+          fi
+          gh release view "$TAG" --json assets --jq '.assets[] | [.name, .size, .updatedAt] | @tsv'
