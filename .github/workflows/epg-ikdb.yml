@@ -59,17 +59,18 @@ jobs:
         if: steps.chk.outputs.skip != '1'
         env:
           TZ: Asia/Tashkent   # "today" for the past/future window = the users' local day
-        run: node --max-old-space-size=6144 epg/ikdb_gen.js /tmp/italo.xml.gz /tmp/italo.ikdb --gz | tee /tmp/gen.log
+        run: node --max-old-space-size=6144 epg/ikdb_gen.js /tmp/italo.xml.gz /tmp/italo.ikdb | tee /tmp/gen.log
       - name: Publish release asset
         if: steps.chk.outputs.skip != '1'
         run: |
           set -e
           stats=$(grep '^{' /tmp/gen.log | tail -1)
-          notes=$(printf 'Pre-built EPG for IK Play (format ikdb1, gzip of SQLite).\nsrc: %s\nsrc_updated_at: %s\nbuilt_at: %s\nstats: %s\n' "$SRC" "${{ steps.chk.outputs.src }}" "$(date -u +%FT%TZ)" "$stats")
+          notes=$(printf 'Pre-built EPG for IK Play (format ikdb1, plain SQLite: blobs inside are already gzip, an outer gzip would only save ~6%%).\nsrc: %s\nsrc_updated_at: %s\nbuilt_at: %s\nstats: %s\n' "$SRC" "${{ steps.chk.outputs.src }}" "$(date -u +%FT%TZ)" "$stats")
           if gh release view "$TAG" >/dev/null 2>&1; then
-            gh release upload "$TAG" /tmp/italo.ikdb.gz --clobber
+            gh release upload "$TAG" /tmp/italo.ikdb --clobber
+            gh release delete-asset "$TAG" italo.ikdb.gz -y 2>/dev/null || true
             gh release edit "$TAG" --notes "$notes"
           else
-            gh release create "$TAG" /tmp/italo.ikdb.gz --title "EPG ikdb (IK Play)" --notes "$notes" --latest=false
+            gh release create "$TAG" /tmp/italo.ikdb --title "EPG ikdb (IK Play)" --notes "$notes" --latest=false
           fi
           gh release view "$TAG" --json assets --jq '.assets[] | [.name, .size, .updatedAt] | @tsv'
