@@ -62,12 +62,23 @@ jobs:
           TZ: Asia/Tashkent
         # user: italo тўлиқ, ҳеч қандай филтрсиз (приставкадаги «Нет» каби) — вақт ойнаси ҳам йўқ (--keep=-1 --ahead=0)
         run: node --max-old-space-size=6144 epg/ikdb_gen.js /tmp/italo.xml.gz /tmp/italo.ikdb --keep=-1 --ahead=0 | tee /tmp/gen.log
+      - name: Encrypt (IKE1)
+        if: steps.chk.outputs.skip != '1'
+        env:
+          IKDB_MASTER: ${{ secrets.IKDB_MASTER }}
+        # 2026-11-06 ikdb ҳимояси: файл шифрланади, калитни фақат сервер пуллик Premium қурилмага беради.
+        # Секрет йўқ бўлса — қадам хато билан тўхтайди (шифрсиз файл ҲЕЧ ҚАЧОН юкланмайди).
+        run: |
+          set -e
+          node epg/ikdb_enc.js enc /tmp/italo.ikdb /tmp/italo.enc
+          mv /tmp/italo.enc /tmp/italo.ikdb
+          head -c 4 /tmp/italo.ikdb | grep -q IKE1
       - name: Publish release asset
         if: steps.chk.outputs.skip != '1'
         run: |
           set -e
           stats=$(grep '^{' /tmp/gen.log | tail -1)
-          notes=$(printf 'Pre-built EPG for IK Play (format ikdb1, plain SQLite: blobs inside are already gzip, an outer gzip would only save ~6%%).\nsrc: %s\nsrc_updated_at: %s\nbuilt_at: %s\nstats: %s\n' "$SRC" "${{ steps.chk.outputs.src }}" "$(date -u +%FT%TZ)" "$stats")
+          notes=$(printf 'Pre-built EPG for IK Play (format ikdb1, encrypted IKE1: the key is served only to IK Play Premium devices).\nsrc: %s\nsrc_updated_at: %s\nbuilt_at: %s\nstats: %s\n' "$SRC" "${{ steps.chk.outputs.src }}" "$(date -u +%FT%TZ)" "$stats")
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" /tmp/italo.ikdb --clobber
             gh release delete-asset "$TAG" italo.ikdb.gz -y 2>/dev/null || true
