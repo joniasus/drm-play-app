@@ -6,8 +6,9 @@ name: EPG ikdb
 
 on:
   schedule:
-    - cron: '45 18 * * *'   # italo full.xml.gz is republished around 18:15 UTC
-    - cron: '45 23 * * *'   # fallback if it was late
+    # italo republishes full.xml.gz ~18:15 UTC but sometimes again in the evening (19-21 London) with sport fixes —
+    # poll every 20 min; the first step only compares the asset's updated_at and skips in ~10 s when unchanged.
+    - cron: '7,27,47 * * * *'
   workflow_dispatch:
     inputs:
       force:
