@@ -58,8 +58,9 @@ jobs:
       - name: Build ikdb
         if: steps.chk.outputs.skip != '1'
         env:
-          TZ: Asia/Tashkent   # "today" for the past/future window = the users' local day
-        run: node --max-old-space-size=6144 epg/ikdb_gen.js /tmp/italo.xml.gz /tmp/italo.ikdb | tee /tmp/gen.log
+          TZ: Asia/Tashkent
+        # user: italo тўлиқ, ҳеч қандай филтрсиз (приставкадаги «Нет» каби) — вақт ойнаси ҳам йўқ (--keep=-1 --ahead=0)
+        run: node --max-old-space-size=6144 epg/ikdb_gen.js /tmp/italo.xml.gz /tmp/italo.ikdb --keep=-1 --ahead=0 | tee /tmp/gen.log
       - name: Publish release asset
         if: steps.chk.outputs.skip != '1'
         run: |
