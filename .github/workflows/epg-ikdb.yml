@@ -78,12 +78,17 @@ jobs:
         run: |
           set -e
           stats=$(grep '^{' /tmp/gen.log | tail -1)
-          notes=$(printf 'Pre-built EPG for IK Play (format ikdb1, encrypted IKE1: the key is served only to IK Play Premium devices).\nsrc: %s\nsrc_updated_at: %s\nbuilt_at: %s\nstats: %s\n' "$SRC" "${{ steps.chk.outputs.src }}" "$(date -u +%FT%TZ)" "$stats")
+          built=$(date -u +%FT%TZ)
+          src="${{ steps.chk.outputs.src }}"
+          notes=$(printf 'Pre-built EPG for IK Play (format ikdb1, encrypted IKE1: the key is served only to IK Play Premium devices).\nsrc: %s\nsrc_updated_at: %s\nbuilt_at: %s\nstats: %s\n' "$SRC" "$src" "$built" "$stats")
+          # ikdb_meta.json — app «IK Play DB» manbasida src_updated_at + built_at ko'rsatadi (release body'dan ko'ra barqaror parse; yo'q bo'lsa app jim)
+          printf '{"src_updated_at":"%s","built_at":"%s","src":"%s","stats":%s}\n' "$src" "$built" "$SRC" "${stats:-null}" > /tmp/ikdb_meta.json
+          cat /tmp/ikdb_meta.json
           if gh release view "$TAG" >/dev/null 2>&1; then
-            gh release upload "$TAG" /tmp/italo.ikdb --clobber
+            gh release upload "$TAG" /tmp/italo.ikdb /tmp/ikdb_meta.json --clobber
             gh release delete-asset "$TAG" italo.ikdb.gz -y 2>/dev/null || true
             gh release edit "$TAG" --notes "$notes"
           else
-            gh release create "$TAG" /tmp/italo.ikdb --title "EPG ikdb (IK Play)" --notes "$notes" --latest=false
+            gh release create "$TAG" /tmp/italo.ikdb /tmp/ikdb_meta.json --title "EPG ikdb (IK Play)" --notes "$notes" --latest=false
           fi
           gh release view "$TAG" --json assets --jq '.assets[] | [.name, .size, .updatedAt] | @tsv'
