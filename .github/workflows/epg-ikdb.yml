@@ -91,4 +91,7 @@ jobs:
           else
             gh release create "$TAG" /tmp/italo.ikdb /tmp/ikdb_meta.json --title "EPG ikdb (IK Play)" --notes "$notes" --latest=false
           fi
+          # ikdb_meta.json ni repo FAYLi sifatida ham yozamiz: app JS raw.githubusercontent.com'dan oladi (release asset CDN objects.githubusercontent.com CORS bermaydi -> JS fetch bloklanadi).
+          meta_sha=$(gh api "repos/${{ github.repository }}/contents/ikdb_meta.json" --jq .sha 2>/dev/null || true)
+          gh api -X PUT "repos/${{ github.repository }}/contents/ikdb_meta.json" -f message="epg-ikdb: meta $built" -f content="$(base64 -w0 /tmp/ikdb_meta.json)" ${meta_sha:+-f sha="$meta_sha"} >/dev/null && echo "repo ikdb_meta.json updated"
           gh release view "$TAG" --json assets --jq '.assets[] | [.name, .size, .updatedAt] | @tsv'
